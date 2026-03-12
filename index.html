@@ -1,114 +1,152 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<meta name="description" content="Globo 3D interativo que gira no navegador; clique para pausar ou continuar a rotação da Terra.">
-<!-- Open Graph -->
-<meta property="og:title" content="Terra 3D Interativa">
-<meta property="og:description" content="Explore a Terra em 3D, clique para pausar ou continuar a rotação.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://terra-3d.vercel.app">
-<meta property="og:image" content="https://terra-3d.vercel.app/earth_512.webp">
-<link rel="icon" href="https://terra-3d.vercel.app/earth_512.webp" type="image/webp">
-<!-- Twitter Cards-->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Terra 3D Interativa">
-<meta name="twitter:description" content="Explore a Terra em 3D, clique para pausar ou continuar a rotação.">
-<meta name="twitter:image" content="https://terra-3d.vercel.app/earth_256.webp">
-<title>Globo 3D</title>
+    <meta charset="UTF-8">
+    <meta name="description"
+        content="Globo 3D interativo no navegador com Three.js. Clique para pausar ou girar a Terra. Experimente agora!">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Terra 3D Interativa">
+    <meta property="og:description" content="Explore a Terra em 3D, clique para pausar ou continuar a rotação.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://terra-3d.vercel.app">
+    <meta property="og:image" content="https://terra-3d.vercel.app/earth_512.webp">
+    <link rel="icon" href="/earth_atmos_512.webp" type="image/webp">
+    <link rel="apple-touch-icon" sizes="180x180" href="/earth_atmos_512.webp">
+    <!-- Twitter Cards-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Terra 3D Interativa">
+    <meta name="twitter:description" content="Explore a Terra em 3D, clique para pausar ou continuar a rotação.">
+    <meta name="twitter:image" content="https://terra-3d.vercel.app/earth_256.webp">
+    <meta property="og:site_name" content="Terra 3D Interativa">
+    <meta property="og:locale" content="pt_BR">
+    <title>Terra 3D Interativa | Explore a Terra em 3D no Navegador</title>
 
-<style>
+    <style>
+        body {
+            background: #000;
+            /* fundo preto */
+            color: #fff;
+            /* texto branco */
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
 
-body{
-margin:0;
-background:#161414;
-overflow:hidden;
-}
+        canvas {
+            cursor: pointer;
+        }
 
-canvas{
-cursor:pointer;
-}
+        h1 {
+            font-size: 3rem;
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px #0ff;
+        }
 
-</style>
+        h2 {
+            font-size: 1.8rem;
+            color: #ffcc00;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 5px #fc0;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #ccc;
+            text-shadow: 1px 1px 3px #888;
+        }
+    </style>
 </head>
 
 <body>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-<script>
+    <h1>Terra 3D Interativa</h1>
+    <h2>Gire, pause e explore a Terra em 3D no navegador</h2>
+    <h3>Desenvolvido com Three.js</h3>
 
-const scene = new THREE.Scene();
+    <script>
 
-const camera = new THREE.PerspectiveCamera(
-75,
-window.innerWidth/window.innerHeight,
-0.1,
-1000
-);
+        const scene = new THREE.Scene();
 
-const renderer = new THREE.WebGLRenderer({
-antialias:false,
-depth:false,
-stencil:false,
-alpha:false
-});
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+        const renderer = new THREE.WebGLRenderer({
+            antialias: false,
+            depth: false,
+            stencil: false,
+            alpha: false
+        });
 
-
-document.body.appendChild(renderer.domElement);
-
-
-// 🌍 geometria otimizada
-const geometry = new THREE.SphereGeometry(2,64,64);
-
-const texture = new THREE.TextureLoader().load("earth_atmos_512.webp");
-
-const material = new THREE.MeshBasicMaterial({map:texture});
-
-const globe = new THREE.Mesh(geometry,material);
-
-scene.add(globe);
-
-camera.position.z = 5;
-
-let spinning = true;
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 
-// clicar para parar / rodar
-renderer.domElement.addEventListener("click",()=>{
-spinning = !spinning;
-});
+        document.body.appendChild(renderer.domElement);
 
 
-// ajustar tela
-window.addEventListener("resize",()=>{
+        // 🌍 geometria otimizada
+        const geometry = new THREE.SphereGeometry(2, 64, 64);
 
-camera.aspect = window.innerWidth/window.innerHeight;
-camera.updateProjectionMatrix();
+        const texture = new THREE.TextureLoader().load("earth_atmos_512.webp");
 
-renderer.setSize(window.innerWidth,window.innerHeight);
+        const material = new THREE.MeshBasicMaterial({ map: texture });
 
-});
+        const globe = new THREE.Mesh(geometry, material);
+
+        scene.add(globe);
+
+        camera.position.z = 5;
+
+        let spinning = true;
 
 
-function animate(){
+        // clicar para parar / rodar
+        renderer.domElement.addEventListener("click", () => {
+            spinning = !spinning;
+        });
 
-requestAnimationFrame(animate);
 
-if(spinning){
-globe.rotation.y += 0.0090;
-}
+        // ajustar tela
+        window.addEventListener("resize", () => {
 
-renderer.render(scene,camera);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
 
-}
+            renderer.setSize(window.innerWidth, window.innerHeight);
 
-animate();
+        });
 
-</script>
+
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            if (spinning) {
+                globe.rotation.y += 0.0090;
+            }
+
+            renderer.render(scene, camera);
+
+        }
+
+        animate();
+
+    </script>
 
 </body>
+
 </html>
